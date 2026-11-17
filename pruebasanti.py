@@ -31,10 +31,10 @@ TIEMPO_ESTABILIZACION_CAMARA = 0.5
 # 2. VELOCIDADES Y ESPERA DE MOVIMIENTO
 # ============================================================
 
-VELOCIDAD_J = 0.10
-ACELERACION_J = 0.15
-VELOCIDAD_L = 0.03
-ACELERACION_L = 0.05
+VELOCIDAD_J = 0.20
+ACELERACION_J = 0.30
+VELOCIDAD_L = 0.05
+ACELERACION_L = 0.10
 
 TIMEOUT_MOVIMIENTO = 90.0
 VELOCIDAD_PARADO = 0.005
@@ -156,6 +156,21 @@ APROXIMACIONES_SECCION_2 = [
     [-0.27357, -0.11967, 0.34914, 0.118, 0.041, -0.713],
 ]  # TODO: lista de 3 poses [x,y,z,rx,ry,rz]
 
+
+
+MOVIMIENTOS_FIJOS_SECCION_1 = [
+    [0.29940, 0.18974, 0.52150, 0.239, -0.067, -4.449],
+    [0.29940, 0.18974, 0.52150, 0.044, 0.291, 4.705],
+    [0.34549, -0.03408, 0.32356, 1.057, 1.348, -1.181],
+    [0.32505, 0.17330, 0.13001, 1.887, 2.482, -0.004],
+]
+
+MOVIMIENTOS_FIJOS_SECCION_2 = [
+    [0.07662, 0.42718, 0.55293, 0.162, 0.038, -3.543],
+    [0.08594, 0.42181, 0.55348, 0.042, -0.037, -0.656],
+    [0.27940, 0.32176, 0.34170, 0.345, 1.553, -0.478],
+    [0.21846, 0.36210, 0.14370, 1.154, 2.965, -0.001],
+]
 
 # ============================================================
 # 6. TRANSFORMACIONES
@@ -472,7 +487,8 @@ def ejecutar_rutina_agarre(
     rutina_base,
     fresa_referencia,
     aproximaciones,
-    es_primera_de_seccion
+    es_primera_de_seccion,
+    movimientos_fijos
 ):
     print("\n================================")
     print("INICIANDO RUTINA DE AGARRE")
@@ -521,6 +537,36 @@ def ejecutar_rutina_agarre(
         else:
             mover_j(robot, receptor, punto)
 
+    # =====================================================
+    # MOVIMIENTOS FIJOS DESPUES DEL PUNTO 6
+    # =====================================================
+
+    # =====================================================
+# MOVIMIENTOS FIJOS DE LA SECCION ACTUAL
+# =====================================================
+
+    if movimientos_fijos:
+
+        print("\nEjecutando movimientos fijos de la seccion...")
+
+        for i, punto in enumerate(movimientos_fijos):
+            print(f"\nEjecutando MOVIMIENTO FIJO {i + 1}/{len(movimientos_fijos)}")
+            mover_j(robot, receptor, punto)
+
+        # Regreso en reversa
+        print("\nRegresando en reversa...")
+
+        for i, punto in enumerate(reversed(movimientos_fijos)):
+            print(f"\nRegresando por MOVIMIENTO FIJO {len(movimientos_fijos) - i}/{len(movimientos_fijos)}")
+            mover_j(robot, receptor, punto)
+
+        # Regresar al Punto 6
+        print("\nRegresando al PUNTO 6...")
+        mover_j(robot, receptor, rutina_actual[5])
+
+    else:
+        print("\nEsta seccion no tiene movimientos fijos.")
+
     print("Rutina de agarre terminada.")
     return True
 
@@ -537,7 +583,8 @@ def cosechar_fresa(robot, receptor, fresa, config_seccion, es_primera_de_seccion
         rutina_base=config_seccion["rutina"],
         fresa_referencia=config_seccion["referencia"],
         aproximaciones=config_seccion["aproximaciones"],
-        es_primera_de_seccion=es_primera_de_seccion
+        es_primera_de_seccion=es_primera_de_seccion,
+        movimientos_fijos=config_seccion["movimientos_fijos"]
     )
 
 
@@ -770,11 +817,13 @@ def main():
                 "rutina": RUTINA_SECCION_1,
                 "referencia": FRESA_REFERENCIA_SECCION_1,
                 "aproximaciones": APROXIMACIONES_SECCION_1,
+                "movimientos_fijos": MOVIMIENTOS_FIJOS_SECCION_1,
             },
             "seccion_2": {
                 "rutina": RUTINA_SECCION_2,
                 "referencia": FRESA_REFERENCIA_SECCION_2,
                 "aproximaciones": APROXIMACIONES_SECCION_2,
+                "movimientos_fijos": MOVIMIENTOS_FIJOS_SECCION_2,
             },
         }
 
