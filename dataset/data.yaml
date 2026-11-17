@@ -1,0 +1,6 @@
+path: /home/itzelh/fresas/dataset
+train: train/images
+val: valid/images
+test: test/images
+nc: 3
+names: ['chica_roja', 'grande_roja', 'verde']

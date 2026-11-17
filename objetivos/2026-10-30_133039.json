@@ -1,0 +1,50 @@
+{
+  "fecha": "2026-10-30T13:30:39",
+  "unidades": "metros",
+  "zona": null,
+  "pose_obs": null,
+  "tcp_quieto": null,
+  "arucos": [
+    {
+      "id": 0,
+      "p_cam": [
+        0.1053,
+        -0.143,
+        0.5486
+      ],
+      "p_base": null
+    }
+  ],
+  "fresas": [
+    {
+      "n": 1,
+      "clase": "grande_roja",
+      "conf": 0.536,
+      "u": 316,
+      "v": 254,
+      "z_m": 0.413,
+      "p_cam": [
+        -0.0089,
+        0.0062,
+        0.413
+      ],
+      "p_tcp": [
+        -0.0089,
+        -0.0648,
+        0.3319
+      ],
+      "p_base": null,
+      "p_marker": {
+        "0": [
+          0.0354,
+          -0.0516,
+          0.2231
+        ]
+      }
+    }
+  ],
+  "elegida": 1,
+  "objetivo": null,
+  "aproximacion": null,
+  "en_zona": null
+}

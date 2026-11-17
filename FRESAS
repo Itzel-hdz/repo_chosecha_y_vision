@@ -1,0 +1,5 @@
+#conectarnos a la camara
+cd ~/fresas && source venv/bin/activate
+
+#correr la deteccion
+python detectar.py
